@@ -12,9 +12,15 @@ import time
 from pathlib import Path
 
 import httpx
+from dotenv import load_dotenv
 from mcp.server.fastmcp import FastMCP
 
-mcp = FastMCP("delegador")
+# Carga las API keys desde el .env junto a este archivo, sin importar el cwd.
+# override=True: el cliente MCP puede pasar variables vacías (ej. GEMINI_API_KEY="")
+# y load_dotenv por defecto no pisa variables ya definidas.
+load_dotenv(Path(__file__).resolve().parent / ".env", override=True)
+
+mcp =FastMCP("delegador")
 
 # ---------------------------------------------------------------------------
 # Configuración de proveedores
@@ -26,7 +32,7 @@ PROVEEDORES = {
         "url": "https://generativelanguage.googleapis.com/v1beta/openai/chat/completions",
         "key_env": "GEMINI_API_KEY",
         "model_env": "GEMINI_MODEL",
-        "model_default": "gemini-2.5-flash",
+        "model_default": "gemini-3.5-flash",
         "uso": "Contextos muy largos: resumir/analizar documentos o repos grandes.",
     },
     "deepseek": {
